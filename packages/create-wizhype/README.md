@@ -68,12 +68,10 @@ my-app/
 
 ```ts
 // src/routes/hello/route.ts
+import { HypeResponse } from "wizhypejs";
 export async function GET(req: any) {
-	return {
-		type: 'json',
-		status: 200,
-		body: JSON.stringify({ message: 'Hello from your new wizhype app' })
-	}
+    const item="Get method is called"
+    return HypeResponse.json({ status: 'ok', data:item })
 }
 ```
 

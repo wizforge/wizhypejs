@@ -112,14 +112,12 @@ Minimal example route:
 
 ```ts
 // src/routes/items/[id]/route.ts
+import { HypeResponse } from "wizhypejs";
 export async function GET(req: any) {
-  const id = req.params.id
-  return {
-    type: 'json',
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, message: 'item details' })
-  }
+    const id  = req.params.id;
+    const item = { id, name: `Item ${id}`, description: `This is item number ${id}` };
+
+    return HypeResponse.json({ status: "success", data: item, statusCode: 200 });
 }
 ```
 
