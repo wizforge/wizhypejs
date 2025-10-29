@@ -1,0 +1,32 @@
+{
+  "name": "create-wizhype",
+  "version": "1.0.4",
+  "description": "Scaffolding tool for wizhypejs projects — like create-next-app but for wizhypejs",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "create-wizhype": "dist/index.js"
+  },
+  "files": ["dist", "templates"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["wizhypejs", "scaffold", "cli", "backend", "routing"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "commander": "^14.0.1",
+    "fs-extra": "^11.3.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3"
+  }
+}
