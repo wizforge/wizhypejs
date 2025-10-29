@@ -1,7 +1,7 @@
 {
   "name": "wizhypejs",
-  "version": "1.0.4",
-  "description": "A minimal backend-first page routing framework inspired by Next.js",
+  "version": "1.0.5",
+  "description": "A minimal backend-first file-based routing framework for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wizforge/hype.js.git"
+    "url": "git+https://github.com/wizforge/wizhypejs.git"
   },
   "bugs": {
-    "url": "https://github.com/wizforge/hype.js/issues"
+    "url": "https://github.com/wizforge/wizhypejs/issues"
   },
-  "homepage": "https://github.com/wizforge/hype.js#readme",
+  "homepage": "https://github.com/wizforge/wizhypejs#readme",
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/bin/cli.ts",
     "build": "tsc -p tsconfig.json",

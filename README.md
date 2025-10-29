@@ -2,13 +2,15 @@
 
 # wizhypejs
 
-### File-based backend routing for Node — Next.js-style routing, focused on server-only APIs
+### File-based backend routing for Node — focused on server-only APIs
 
 *A tiny, developer-first routing framework for Node.js. Create file-based API routes and run a fast, minimal server with an easy CLI.*
 
 [![NPM Version](https://img.shields.io/npm/v/wizhypejs.svg)](https://www.npmjs.com/package/wizhypejs)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+
+[Repository](https://github.com/wizforge/wizhypejs)
 
 ### 🚀 Quick • Simple • File-based
 
