@@ -1,0 +1,12 @@
+// Re-export public API for route authors
+export { HypeResponse } from './core/response.js'
+export type { HypeResponseLike } from './core/response.js'
+
+export { HypeRequest } from './core/request.js'
+export type { RawRequestShape } from './core/request.js'
+
+export { default as Router } from './core/router.js'
+export { startServer } from './core/server.js'
+
+// Also export utilities
+export { default as scanRoutes } from './utils/fileScanner.js'
