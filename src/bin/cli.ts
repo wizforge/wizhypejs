@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// Load environment variables from .env file
+import 'dotenv/config'
+
 import { Command } from 'commander'
 import { spawn } from 'child_process'
 

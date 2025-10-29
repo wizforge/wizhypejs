@@ -1,6 +1,6 @@
 {
   "name": "wizhypejs",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A minimal backend-first file-based routing framework for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -41,9 +41,8 @@
   "dependencies": {
     "chalk": "^5.6.2",
     "commander": "^14.0.1",
-    "dotenv": "^17.2.3",
     "fs-extra": "^11.3.2",
-    "nodemon": "^3.1.10"
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",
@@ -52,6 +51,7 @@
     "@types/node": "^24.9.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "nodemon": "^3.1.10"
   }
 }

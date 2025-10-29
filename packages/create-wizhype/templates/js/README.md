@@ -6,10 +6,22 @@ A backend API built with [wizhypejs](https://github.com/wizforge/hype.js).
 
 ```bash
 npm install
+cp .env.example .env  # Set up environment variables
 npm run dev
 ```
 
 Visit http://localhost:3000/hello to test.
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and customize:
+
+```bash
+cp .env.example .env
+```
+
+Available variables:
+- `PORT` — server port (default: 3000, auto-detects if busy)
 
 ## Project Structure
 
