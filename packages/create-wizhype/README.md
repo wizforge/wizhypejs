@@ -1,8 +1,16 @@
+<!-- prettier-ignore -->
 # create-wizhype
 
-Scaffolding tool for [wizhypejs](https://github.com/wizforge/hype.js) projects. Similar to `create-next-app` but for backend file-based routing.
+<div align="center">
 
-## Usage
+![NPM Version](https://img.shields.io/npm/v/create-wizhype.svg)
+![Node](https://img.shields.io/badge/Node-%3E%3D18-brightgreen.svg)
+
+</div>
+
+A tiny CLI to scaffold a new wizhypejs project with sensible defaults — TypeScript and JavaScript templates included. Get started quickly with an opinionated file-based backend routing structure and working dev scripts.
+
+## Quick demo
 
 ```bash
 npx create-wizhype my-app
@@ -11,41 +19,77 @@ npm install
 npm run dev
 ```
 
-## Options
+The generated project includes a minimal server entry and example routes so you can curl the API immediately:
 
 ```bash
-# Scaffold with JavaScript (default: TypeScript)
-npx create-wizhype my-app --language js
+curl http://localhost:3000/hello
+```
 
-# Or short form
+## Features
+
+- Scaffolds TypeScript or JavaScript projects
+- Adds `src/routes/` with example API routes
+- Includes working dev/build/start scripts
+- Small, focused template ideal for microservices and prototypes
+
+## CLI usage
+
+Create a new project (TypeScript is the default):
+
+```bash
+npx create-wizhype my-app
+```
+
+Create with JavaScript instead of TypeScript:
+
+```bash
+npx create-wizhype my-app --language js
+# or short form
 npx create-wizhype my-app -l js
 ```
 
-## What's Included
+## Generated project structure
 
-Both TypeScript and JavaScript templates come with:
+The scaffolded app contains everything you need to start:
 
-- **package.json** — dependencies and scripts pre-configured
-- **src/index.(ts|js)** — server entry that starts wizhypejs
-- **src/routes/** — example routes (hello, health)
-- **tsconfig.json** (TypeScript only) — TypeScript configuration
-- **.gitignore** — sensible defaults
-- **README.md** — project documentation
-
-## Getting Started
-
-After scaffolding:
-
-```bash
-npm install                # Install dependencies
-npm run dev                # Start dev server with hot reload
-curl http://localhost:3000/hello   # Test the API
+```
+my-app/
+├─ package.json      # scripts: dev, build, start
+├─ src/
+│  ├─ index.ts       # server entry
+│  └─ routes/
+│     ├─ hello/route.ts
+│     └─ health/route.ts
+├─ tsconfig.json     # when TS selected
+└─ README.md
 ```
 
-## Learn More
+## Example route
 
-- [wizhypejs Documentation](https://github.com/wizforge/hype.js#readme)
-- [File-based Routing Guide](https://github.com/wizforge/hype.js#-routing-convention)
+```ts
+// src/routes/hello/route.ts
+export async function GET(req: any) {
+	return {
+		type: 'json',
+		status: 200,
+		body: JSON.stringify({ message: 'Hello from your new wizhype app' })
+	}
+}
+```
+
+## Tips
+
+- Run `npm run dev` to start with hot reload during development.
+- Use `npm run build` and `npm start` for production.
+
+## Learn more
+
+- Project: https://github.com/wizforge/wizhypejs
+- Routing docs: see `src/routes` in the scaffolded app
+
+## Contributing
+
+If you'd like to improve the templates, open a PR in this repository. Tests and small quality-of-life templates (auth, DB, uploads) are welcome.
 
 ## License
 

@@ -1,13 +1,21 @@
 {
   "name": "create-wizhype",
-  "version": "1.0.4",
-  "description": "Scaffolding tool for wizhypejs projects — like create-next-app but for wizhypejs",
+  "version": "1.0.6",
+  "description": "Scaffolding tool for wizhypejs projects — file-based backend routing project generator",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
     "create-wizhype": "dist/index.js"
   },
   "files": ["dist", "templates"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wizforge/hype.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wizforge/hype.js/issues"
+  },
+  "homepage": "https://github.com/wizforge/hype.js#readme",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
