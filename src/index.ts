@@ -1,3 +1,6 @@
+// Load environment variables from .env file
+import 'dotenv/config'
+
 // Re-export public API for route authors
 export { HypeResponse } from './core/response.js'
 export type { HypeResponseLike } from './core/response.js'
@@ -10,3 +13,4 @@ export { startServer } from './core/server.js'
 
 // Also export utilities
 export { default as scanRoutes } from './utils/fileScanner.js'
+export { findAvailablePort } from './utils/portFinder.js'

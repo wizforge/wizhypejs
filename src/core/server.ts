@@ -2,9 +2,29 @@ import http from 'http'
 import path from 'path'
 import Router from './router.js'
 import logger from '../utils/logger.js'
+import { findAvailablePort } from '../utils/portFinder.js'
 
 export async function startServer(opts: { port?: number; routesDir?: string } = {}) {
-  const port = opts.port ?? (process.env.PORT ? Number(process.env.PORT) : 3000)
+  // Parse initial port preference
+  let preferredPort = opts.port
+  if (preferredPort === undefined) {
+    const envPort = process.env.PORT
+    if (envPort) {
+      const parsedPort = parseInt(envPort, 10)
+      preferredPort = isNaN(parsedPort) ? 3000 : parsedPort
+    } else {
+      preferredPort = 3000
+    }
+  }
+  
+  // Validate port range
+  if (isNaN(preferredPort) || preferredPort < 0 || preferredPort > 65535) {
+    preferredPort = 3000
+  }
+
+  // Find an available port starting from the preferred port
+  const port = await findAvailablePort(preferredPort)
+
   const routesDir = opts.routesDir ?? path.resolve(process.cwd(), 'src/routes')
   const router = new Router()
   await router.loadRoutes(routesDir)
@@ -39,7 +59,12 @@ export async function startServer(opts: { port?: number; routesDir?: string } = 
   })
 
   await new Promise<void>((resolve) => server.listen(port, () => resolve()))
-  console.log(`Hype server listening on http://localhost:${port}`)
+  
+  // Show helpful message if port was changed
+  if (port !== preferredPort) {
+    console.log(`Port ${preferredPort} was busy, using port ${port} instead`)
+  }
+  console.log(`🚀 Hype server listening on http://localhost:${port}`)
   return server
 }
 

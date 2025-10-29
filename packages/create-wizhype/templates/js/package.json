@@ -8,7 +8,7 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "wizhypejs": "^1.0.7"
+    "wizhypejs": "^1.0.8"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
