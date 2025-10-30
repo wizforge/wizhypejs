@@ -1,6 +1,6 @@
 {
   "name": "create-wizhype",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Scaffolding tool for wizhypejs projects — file-based backend routing project generator",
   "main": "dist/index.js",
   "type": "module",
