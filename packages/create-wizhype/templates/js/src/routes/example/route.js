@@ -1,6 +1,6 @@
 import { createHandler, HypeResponse } from 'wizhypejs'
-import { loggerMiddleware } from '../middleware/logger.js'
-import { authMiddleware } from '../middleware/auth.js'
+import { loggerMiddleware } from '../../middleware/logger.js'
+import { authMiddleware } from '../../middleware/auth.js'
 
 // Public route, no middleware
 export async function GET(req) {
@@ -22,7 +22,7 @@ export const POST = createHandler(
   authMiddleware
 )
 
-// Route with multiple middleware (logging and auth)
+// Route with logging middleware 
 export const PUT = createHandler(
   async (req) => {
     return HypeResponse.json({
@@ -31,6 +31,5 @@ export const PUT = createHandler(
       timestamp: new Date().toISOString(),
     })
   },
-  loggerMiddleware,
-  authMiddleware
+  loggerMiddleware
 )
