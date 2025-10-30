@@ -47,6 +47,35 @@ npm install
 npm run dev
 ```
 
+### Environment Configuration
+
+Create a `.env` file in your project root:
+
+```env
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# CORS Configuration
+CORS_ORIGIN=http://localhost:3000
+CORS_CREDENTIALS=false
+```
+
+### Simple Server Setup
+
+```typescript
+import { startServer } from 'wizhypejs'
+
+// Simple configuration with environment variables
+startServer({
+  port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+  cors: {
+    origin: process.env.CORS_ORIGIN || '*',
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }
+})
+```
+
 The scaffold sets up a minimal project with `src/index.(ts|js)`, `src/routes/` with example routes (`/hello`, `/health`), and all dependencies pre-configured.
 
 ### 30-Second Setup (manual — in existing projects)
@@ -78,14 +107,38 @@ Example: `src/routes/hello/route.ts`
 ```ts
 import { HypeResponse } from 'wizhypejs'
 
-export async function GET(req: any) {
+// Simple route handler (no middleware)
+export async function GET(req) {
   return HypeResponse.json({ message: 'Hello from GET' })
 }
 
-export async function POST(req: any) {
+// Middleware definition
+const authMiddleware = async (req, res, next) => {
+  const token = req.headers.authorization
+  if (!token) {
+    res.status = 401
+    res.body = JSON.stringify({ error: 'Unauthorized' })
+    return
+  }
+  await next()
+}
+
+// Route with middleware (Express-style)
+export async function POST(authMiddleware, req) {
   const body = await req.json()
   return HypeResponse.json({ message: 'Created', payload: body }, { status: 201 })
 }
+
+// Route with multiple middleware
+export async function PUT(loggerMiddleware, authMiddleware, req) {
+  const body = await req.json()
+  return HypeResponse.json({ message: 'Updated', payload: body })
+}
+
+// Alternative array syntax is also supported
+export const DELETE = [authMiddleware, async (req) => {
+  return HypeResponse.json({ message: 'Deleted' })
+}]
 ```
 
 JavaScript example uses the same shape:
@@ -129,11 +182,14 @@ Notes:
 ## 📦 Features
 
 - 🎯 File-based routing — route files map to URL paths automatically
+- 🔒 Built-in CORS support — easy configuration for cross-origin requests
+- 🔌 Express-style middleware — global and route-specific middleware support
+- 🚀 Auto port configuration — automatic fallback to available ports
 - 🧾 Simple request helpers — `req.json()`, `req.text()`
 - 📤 Response helpers — `HypeResponse.json()` and `HypeResponse.text()` with optional status & headers
-- 🚀 Developer CLI — `create`, `dev`, `build`, `start` (scaffolds working examples)
-- 🔧 TypeScript-ready templates and types
-- 🔌 Small surface area — easy to extend with middleware or advanced routing later
+- � Hot reload in development — fast development workflow
+- � TypeScript-ready templates and types
+- ⚡ Small and fast — minimal overhead, maximum performance
 
 ## 🧭 API Reference
 
@@ -144,10 +200,32 @@ Start the local HTTP server and load file-based routes.
 
 ```ts
 import { startServer } from 'wizhypejs'
-startServer({ port: 3000 })
+
+startServer({
+  port: 3000,
+  // Enable CORS with custom configuration
+  cors: {
+    origin: ['http://localhost:3000', 'https://yourapp.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    maxAge: 86400
+  }
+})
 ```
 
-options: { port?: number } — defaults to 3000
+Options:
+- `port?: number` — Server port (defaults to 3000)
+- `routesDir?: string` — Custom routes directory
+- `cors?: boolean | CorsConfig` — CORS configuration
+  - `origin?: string | string[] | boolean` — Allowed origins
+  - `methods?: string[]` — Allowed HTTP methods
+  - `allowedHeaders?: string[]` — Allowed request headers
+  - `exposedHeaders?: string[]` — Headers exposed to browser
+  - `credentials?: boolean` — Allow credentials
+  - `maxAge?: number` — Preflight cache duration
+  - `preflightContinue?: boolean` — Pass OPTIONS to routes
+  - `optionsSuccessStatus?: number` — OPTIONS response code
 
 ### HypeResponse
 Helpers to create responses from your handler functions.
@@ -166,11 +244,81 @@ export async function GET(req: any) {
 }
 ```
 
+### Middleware Support
+
+Hype.js supports three ways to use middleware:
+
+1. Express-style Parameter Syntax (Recommended):
+```typescript
+// src/routes/admin/route.ts
+
+// Define middleware
+const authMiddleware = async (req, res, next) => {
+  if (!req.headers.authorization) {
+    res.status = 401
+    res.body = JSON.stringify({ error: 'Unauthorized' })
+    return
+  }
+  await next()
+}
+
+// Use middleware as parameters (Express-style)
+export async function GET(authMiddleware, req) {
+  return { message: 'Protected route' }
+}
+
+// Multiple middleware
+export async function POST(loggerMiddleware, authMiddleware, req) {
+  return { message: 'Protected with logging' }
+}
+```
+
+2. Array Syntax (Alternative):
+```typescript
+// Use middleware in array
+export const PUT = [authMiddleware, async (req) => {
+  return { message: 'Protected route' }
+}]
+```
+
+3. Global Middleware:
+```typescript
+// Apply middleware to all routes
+const server = await startServer()
+server.router.use(async (req, res, next) => {
+  console.log(`${req.method} ${req.url}`)
+  await next()
+})
+```
+
+TypeScript Support:
+```typescript
+import type { HypeRequest } from 'wizhypejs'
+
+type MiddlewareFunction = (
+  req: HypeRequest,
+  res: { status?: number; body?: string; headers?: Record<string, string> },
+  next: () => Promise<void>
+) => Promise<void>
+
+// Type-safe middleware
+const authMiddleware: MiddlewareFunction = async (req, res, next) => {
+  // Your middleware logic
+  await next()
+}
+
+// Type-safe route with middleware
+export async function GET(authMiddleware: MiddlewareFunction, req: HypeRequest) {
+  return { message: 'Type-safe route' }
+}
+```
+
 ### Request helpers
 
 - `req.json()` — parse JSON body (async)
 - `req.text()` — get raw text body
 - `req.method`, `req.url`, `req.headers` — request metadata
+- `req.params` — route parameters from dynamic segments
 
 ## 🔧 CLI (scaffold & run)
 
@@ -209,6 +357,22 @@ Contributions welcome! Please:
 See the `LICENSE` file for license info (MIT).
 
 ## 📋 Changelog
+
+### v1.0.9
+- 🎯 Added Express-style middleware parameter syntax
+- 🔄 Simplified CORS configuration
+- ⚙️ Added environment variables support
+- 🛠️ Improved TypeScript type definitions
+- 📝 Updated templates with new middleware syntax
+- 🌟 Enhanced documentation and examples
+
+### v1.0.8
+- ✨ Added built-in CORS support with extensive configuration options
+- 🔌 Added middleware support (global and route-specific)
+- 🚀 Added automatic port finding when preferred port is busy
+- 🔄 Improved TypeScript support and type definitions
+- 📝 Updated templates with CORS and middleware examples
+- 🐛 Various bug fixes and performance improvements
 
 ### v1.0.0
 - Initial minimal release — file-based routing, CLI scaffolding, request/response helpers

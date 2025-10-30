@@ -1,8 +1,16 @@
 import type HypeRequest from './request.js'
+import type { HypeResponseLike } from './response.js'
 
-export type RouteHandler = (req: HypeRequest) => Promise<any> | any
+export type NextFunction = () => Promise<void>
+export type MiddlewareFunction = (req: HypeRequest, res: HypeResponseLike, next: NextFunction) => Promise<void>
 
-export type RouteModule = Record<string, RouteHandler>
+// Updated to support middleware parameters
+export type RouteHandler = (...args: any[]) => Promise<any> | any
+
+// Support both middleware as parameters and array syntax
+export type RouteDefinition = RouteHandler
+
+export type RouteModule = Record<string, RouteDefinition>
 
 export type LoadedRoute = {
   path: string

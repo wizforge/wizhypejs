@@ -1,10 +1,15 @@
 import http from 'http'
+import fs from 'fs'
 import path from 'path'
 import Router from './router.js'
 import logger from '../utils/logger.js'
 import { findAvailablePort } from '../utils/portFinder.js'
+import { HypeConfig, CorsConfig, defaultConfig } from './config.js'
+import { createCorsMiddleware } from './cors.js'
 
-export async function startServer(opts: { port?: number; routesDir?: string } = {}) {
+export async function startServer(opts: HypeConfig = {}) {
+  // Merge with default config
+  const config = { ...defaultConfig, ...opts }
   // Parse initial port preference
   let preferredPort = opts.port
   if (preferredPort === undefined) {
@@ -25,8 +30,19 @@ export async function startServer(opts: { port?: number; routesDir?: string } = 
   // Find an available port starting from the preferred port
   const port = await findAvailablePort(preferredPort)
 
-  const routesDir = opts.routesDir ?? path.resolve(process.cwd(), 'src/routes')
+  // Prefer `dist/routes` in production builds if it exists, otherwise fall back to `src/routes`.
+  const defaultSrcRoutes = path.resolve(process.cwd(), 'src/routes')
+  const defaultDistRoutes = path.resolve(process.cwd(), 'dist/routes')
+  const defaultRoutesDir = fs.existsSync(defaultDistRoutes) ? defaultDistRoutes : defaultSrcRoutes
+  const routesDir = config.routesDir ?? defaultRoutesDir
   const router = new Router()
+
+  // Apply CORS if enabled
+  if (config.cors) {
+    const corsConfig = config.cors === true ? (defaultConfig.cors as CorsConfig) : config.cors
+    router.use(createCorsMiddleware(corsConfig))
+  }
+
   await router.loadRoutes(routesDir)
 
   const server = http.createServer(async (req, res) => {
