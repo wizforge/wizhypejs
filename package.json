@@ -1,6 +1,6 @@
 {
   "name": "wizhypejs",
-  "version": "1.0.9",
+  "version": "1.2.4",
   "description": "A minimal backend-first file-based routing framework for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

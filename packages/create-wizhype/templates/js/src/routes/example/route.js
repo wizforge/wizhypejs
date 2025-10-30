@@ -1,38 +1,36 @@
-// Example middleware
-const loggerMiddleware = async (req, res, next) => {
-  console.log(`📝 ${req.method} ${req.url}`)
-  await next()
-}
+import { createHandler, HypeResponse } from 'wizhypejs'
+import { loggerMiddleware } from '../middleware/logger.js'
+import { authMiddleware } from '../middleware/auth.js'
 
-const authMiddleware = async (req, res, next) => {
-  const token = req.headers.authorization
-  if (!token) {
-    res.status = 401
-    res.body = JSON.stringify({ error: 'Unauthorized' })
-    return
-  }
-  await next()
-}
-
-// Public route - no middleware
+// Public route, no middleware
 export async function GET(req) {
-  return {
-    message: 'Hello World!'
-  }
+  return HypeResponse.json({
+    message: 'Hello from wizhypejs!',
+    timestamp: new Date().toISOString(),
+  })
 }
 
-// Route with single middleware
-export async function POST(authMiddleware, req) {
-  return {
-    message: 'Protected route',
-    data: 'This route requires authentication'
-  }
-}
+// Route protected by middleware (auth only)
+export const POST = createHandler(
+  async (req) => {
+    const body = await req.json()
+    return HypeResponse.json({
+      message: 'Created',
+      received: body,
+    }, { status: 201 })
+  },
+  authMiddleware
+)
 
-// Route with multiple middleware
-export async function PUT(loggerMiddleware, authMiddleware, req) {
-  return {
-    message: 'Protected route with logging',
-    data: 'This route requires authentication and logs access'
-  }
-}
+// Route with multiple middleware (logging and auth)
+export const PUT = createHandler(
+  async (req) => {
+    return HypeResponse.json({
+      message: 'Protected route with logging',
+      data: 'Requires authentication and logs access',
+      timestamp: new Date().toISOString(),
+    })
+  },
+  loggerMiddleware,
+  authMiddleware
+)
