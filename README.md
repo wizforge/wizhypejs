@@ -34,7 +34,7 @@ Perfect for microservices, prototyping, or APIs where you want simple routing wi
 ## ⚙️ Quick Start
 
 Scaffold a new project using `create-wizhype` (TypeScript is the default):
-# wizhypejs (v1.2.3)
+
 
 A tiny, developer-first file-based routing framework for Node.js focused on server-only APIs.
 
@@ -52,7 +52,7 @@ Quick start
 1. Scaffold a new project (TypeScript by default):
 
 ```bash
-npx create-wizhype my-app
+npx create-wizhype my-app or npx create-wizhype my-app --language js
 cd my-app
 npm install
 npm run dev
