@@ -9,7 +9,7 @@
     "start": "npm run build && node dist/index.js"
   },
   "dependencies": {
-    "wizhypejs": "^1.2.6"
+    "wizhypejs": "^1.2.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
