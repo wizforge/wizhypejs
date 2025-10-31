@@ -10,12 +10,12 @@
   "files": ["dist", "templates"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wizforge/hype.js.git"
+    "url": "git+https://github.com/wizforge/wizhypejs.git"
   },
   "bugs": {
-    "url": "https://github.com/wizforge/hype.js/issues"
+    "url": "https://github.com/wizforge/wizhypejs/issues"
   },
-  "homepage": "https://github.com/wizforge/hype.js#readme",
+  "homepage": "https://github.com/wizforge/wizhypejs#readme",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",

@@ -52,7 +52,7 @@ Quick start
 1. Scaffold a new project (TypeScript by default):
 
 ```bash
-npx create-wizhype my-app
+npx create-wizhype my-app or npx create-wizhype my-app --language js
 cd my-app
 npm install
 npm run dev
